@@ -1,4 +1,4 @@
-eq()case $1 in $2);;*)return 1;esac
+B=/var/run/dmesg.boot;D=/sys/devices/virtual/dmi/id/;eq()case $1 in $2);;*)return 1;esac
 wm=${XDG_CURRENT_DESKTOP:-$DESKTOP_SESSION}
 for o in /etc/os-release /usr/lib/os-release;do [ -f $o ]&&. $o&&break;done
 if [ -e /proc/$$/comm ];then
@@ -11,13 +11,13 @@ done
 while read -r a m _;do eq "$a" 'MemTotal*'&&break;done</proc/meminfo;mem="$((m/1000))MB"
 while read -r l;do case $l in vendor_id*)v="${l##*: } ";;model*name*)cpu=${l##*: };break;esac;done</proc/cpuinfo
 IFS=. read -r u _ </proc/uptime;d=$((u/86400));up=$(printf %02d:%02d $((u/3600%24)) $((u/60%60)))
-[ "$d" -gt 0 ]&&up="${d}d $up"
+[ $d -gt 0 ]&&up="${d}d $up"
 read -r _ _ k _ </proc/version;kernel=${k%%-*};eq "$k" '*Microsoft*'&&ID="fake $ID"
-read -r m</sys/devices/virtual/dmi/id/product_name
-case $m in 'System '*|'Default '*|'To Be Filled'*)read -r m</sys/devices/virtual/dmi/id/board_name;esac
+read -r m<${D}product_name
+case $m in 'System '*|'Default '*|'To Be Filled'*)read -r m<${D}board_name;esac
 for i in '/var/db/kiss/installed/*' '/var/lib/pacman/local/[0-9a-z]*' '/var/lib/dpkg/info/*.list' '/var/db/xbps/.*' '/var/db/pkg/*/*';do set -- $i;[ $# -gt 1 ]&&pkgs=$#&&break;done
-read -r h</proc/sys/kernel/hostname;elif [ -f /var/run/dmesg.boot ];then
-read -r b</var/run/dmesg.boot;case $b in Open*)while read -r l;do case $l in 'real mem'*)mem=${l##*\(};mem=${mem%\)*};;cpu0*)cpu=${l#cpu0: };cpu=${cpu%%,*};v=${cpu%% *};break;;*)[ "$ID" ]||{ set -- $l;ID="$1 $2"; };esac;done</var/run/dmesg.boot;[ -d /var/db/pkg ]&&set -- /var/db/pkg/*&&pkgs=$#;read -r h</etc/myname;h=${h%.*};;*) . /etc/rc.conf;h=$hostname;while read -r l;do case $l in FreeBSD*)[ "$ID" ]&&continue;ID=${l%%-R*};;CPU:*)cpu=${l%\(*};;*Origin=*)v=${l#*Origin=\"};v="${v%%\"*} ";;'real memory'*)mem=${l##*\(};mem=${mem%\)*};break;esac;done</var/run/dmesg.boot;esac;elif v=/System/Library/CoreServices/SystemVersion.plist;[ -f "$v" ];then
+read -r h</proc/sys/kernel/hostname;elif [ -f $B ];then
+read -r b<$B;case $b in Open*)while read -r l;do case $l in 'real mem'*)mem=${l##*\(};mem=${mem%\)*};;cpu0*)cpu=${l#cpu0: };cpu=${cpu%%,*};v=${cpu%% *};break;;*)[ "$ID" ]||{ set -- $l;ID="$1 $2"; };esac;done<$B;[ -d /var/db/pkg ]&&set -- /var/db/pkg/*&&pkgs=$#;read -r h</etc/myname;h=${h%.*};;*) . /etc/rc.conf;h=$hostname;while read -r l;do case $l in FreeBSD*)[ "$ID" ]&&continue;ID=${l%%-R*};;CPU:*)cpu=${l%\(*};;*Origin=*)v=${l#*Origin=\"};v="${v%%\"*} ";;'real memory'*)mem=${l##*\(};mem=${mem%\)*};break;esac;done<$B;esac;elif v=/System/Library/CoreServices/SystemVersion.plist;[ -f "$v" ];then
 while read -r l;do case $l in *ProductVersion*)t=.;;*)[ "$t" ]||continue;ID=${l#*>};ID="MacOS ${ID%<*}";break;esac;done<"$v"
 fi
 eq "$0" '*fetish'&&printf 'Step on me daddy\n'&&exit
