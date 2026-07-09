@@ -2,7 +2,7 @@
 <h1>golfet.sh</h1>
 golfed fet.sh
 <br>
-<img src="screenshot.png" width="250px">
+<img src="screenshot.png">
 </div>
 
 ### Installing
