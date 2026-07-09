@@ -1,3 +1,4 @@
+set --
 eq()case $1 in $2);;*)return 1;esac
 wm=${XDG_CURRENT_DESKTOP:-$DESKTOP_SESSION}
 for o in /etc/os-release /usr/lib/os-release;do [ -f $o ]&&. $o&&break;done
@@ -8,7 +9,7 @@ while read -r l;do eq "$l" 'PPid*'&&p=${l##*:?}&&break;done<"/proc/${p:-$PPID}/s
 case $n in *sh|"${0##*/}");;*login*|*init|*systemd*)break;;*)term=$n;esac
 done
 [ "$wm" ]||for i in /proc/*/comm;do read -r c<"$i";case $c in *bar*|*rc);;awesome|xmonad*|qtile|sway|i3|[bfo]*box|*wm*)wm=${c%%-*};break;esac;done
-while read -r _ m _;do eq "$_" 'MemTotal*'&&break;done</proc/meminfo;mem="$((m/1000))MB"
+while read -r a m _;do eq "$a" 'MemTotal*'&&break;done</proc/meminfo;mem="$((m/1000))MB"
 while read -r a _ c;do case $a in vendor_id)v="$c ";;model*name*)cpu=${c#: };break;esac;done</proc/cpuinfo
 IFS=. read -r u _ </proc/uptime;d=$((u/86400));up=$(printf %02d:%02d $((u/3600%24)) $((u/60%60)))
 [ "$d" -gt 0 ]&&up="${d}d $up"

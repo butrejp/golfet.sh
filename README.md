@@ -24,7 +24,5 @@ For less trivial configuration I recommend editing the script, I tried to keep i
 ### Known Issues
 MacOS, BSD, and Android don't show much info.
 
-mem readout seems broken at the moment
-
 ### unknown issues
 I minified the hell out of this and don't know what does or doesn't work when or where.  I have no QA pipeline, I'm just winging it.  it still does it's primary function acting as a fetch tool
