@@ -1,4 +1,3 @@
-set --
 eq()case $1 in $2);;*)return 1;esac
 wm=${XDG_CURRENT_DESKTOP:-$DESKTOP_SESSION}
 for o in /etc/os-release /usr/lib/os-release;do [ -f $o ]&&. $o&&break;done
