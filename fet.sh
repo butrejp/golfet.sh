@@ -10,7 +10,7 @@ case $n in *sh|"${0##*/}");;*login*|*init|*systemd*)break;;*)term=$n;esac
 done
 [ "$wm" ]||for i in /proc/*/comm;do read -r c<"$i";case $c in *bar*|*rc);;awesome|xmonad*|qtile|sway|i3|[bfo]*box|*wm*)wm=${c%%-*};break;esac;done
 while read -r a m _;do eq "$a" 'MemTotal*'&&break;done</proc/meminfo;mem="$((m/1000))MB"
-while read -r a _ c;do case $a in vendor_id)v="$c ";;model*name*)cpu=${c#: };break;esac;done</proc/cpuinfo
+while read -r l;do case $l in vendor_id*)v="${l##*: } ";;model*name*)cpu=${l##*: };break;esac;done</proc/cpuinfo
 IFS=. read -r u _ </proc/uptime;d=$((u/86400));up=$(printf %02d:%02d $((u/3600%24)) $((u/60%60)))
 [ "$d" -gt 0 ]&&up="${d}d $up"
 read -r _ _ k _ </proc/version;kernel=${k%%-*};eq "$k" '*Microsoft*'&&ID="fake $ID"
