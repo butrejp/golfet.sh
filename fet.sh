@@ -24,6 +24,6 @@ eq "$0" '*fetish'&&printf 'Step on me daddy\n'&&exit
 eq "$wm" '*[Gg][Nn][Oo][Mm][Ee]*'&&wm='foot DE'
 while read -r l;do eq "$l" 'gtk-theme*'&&gtk=${l##*=}&&break;done<"${XDG_CONFIG_HOME:=$HOME/.config}/gtk-3.0/settings.ini"
 v=${v##*Authentic};v=${v##*Genuine};cpu=${cpu##*) };cpu=${cpu%% @*};cpu=${cpu%% CPU};cpu=${cpu##CPU };cpu=${cpu##*AMD };cpu=${cpu%% with*};cpu=${cpu% *-Core*}
-col()(printf '  ';for i in 1 2 3 4 5 6;do printf '\033[9%sm%s' "$i" "${colourblocks:-▅▅}";done;printf '\033[0m\n')
+col()(printf '  ';for i in 1 2 3 4 5 6;do printf '\033[9%sm%s' $i "${colourblocks:-▅▅}";done;printf '\033[0m\n')
 p()([ "$2" ]&&printf '\033[9%sm%6s\033[0m%b%s\n' "${accent:-4}" $1 "${separator:- ~ }" "$2")
-for i in ${info:-n user os sh wm up gtk cpu mem host kern pkgs term col n};do case $i in n)echo;;os)p os "$ID";;sh)p sh "${SHELL##*/}";;wm)p wm "${wm##*/}";;up)p up "$up";;gtk)p gtk "${gtk# }";;cpu)p cpu "$v$cpu";;mem)p mem "$mem";;host)p host "$m";;kern)p kern "$kernel";;pkgs)p pkgs "$pkgs";;term)p term "$term";;user)printf '%7s@%s\n' "$USER" "$h";;col)col;esac;done
+for i in ${info:-n user os sh wm up gtk cpu mem host kern pkgs term col n};do case $i in n)echo;;os)p os "$ID";;sh)p sh ${SHELL##*/};;wm)p wm ${wm##*/};;up)p up "$up";;gtk)p gtk "${gtk# }";;cpu)p cpu "$v$cpu";;mem)p mem $mem;;host)p host "$m";;kern)p kern $kernel;;pkgs)p pkgs $pkgs;;term)p term $term;;user)printf '%7s@%s\n' "$USER" "$h";;col)col;esac;done
